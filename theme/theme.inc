@@ -21,20 +21,16 @@ function islandora_pdf_preprocess_islandora_pdf(&$variables) {
 
   try {
     $dc = $islandora_object['DC']->content;
-    $dc_object = DublinCore::import_from_xml_string($dc);
+    $dc_object = DublinCore::importFromXMLString($dc);
   } catch (Exception $e) {
     drupal_set_message(t('Error retrieving object %s %t', array('%s' => $islandora_object->id, '%t' => $e->getMessage())), 'error', FALSE);
   }
   $variables['islandora_dublin_core'] = isset($dc_object) ? $dc_object : NULL;
-  $variables['dc_array'] = isset($dc_object) ? $dc_object->as_formatted_array() : array();
+  $variables['dc_array'] = isset($dc_object) ? $dc_object->asArray() : array();
   $variables['islandora_object_label'] = $islandora_object->label;
   $variables['theme_hook_suggestions'][] = 'islandora_pdf__' . str_replace(':', '_', $islandora_object->id);
   $variables['parent_collections'] = islandora_get_parents_from_rels_ext($islandora_object);
   global $base_url;
-  // set title
-  if (isset($islandora_object->label)) {
-    drupal_set_title($islandora_object->label);
-  }
   // full size url
   if (isset($islandora_object['OBJ'])) {
     $full_size_url = url("islandora/object/{$islandora_object->id}/datastream/OBJ/view", array('absolute' => TRUE));
