@@ -93,6 +93,13 @@ function islandora_pdf_pdf_upload_form_submit(array $form, array &$form_state) {
     }
     $text_file = file_load($form_state['values']['text']);
     $text_path = drupal_realpath($text_file->uri);
+    $contents = file_get_contents($text_path);
+    if (!isset($contents) || strlen($contents) == 0) {
+        $contents = ' ';
+    }
+    $fh = fopen($text_path, 'w');
+    fwrite($fh, preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', ' ', $contents));
+    fclose($fh);
     $ds->setContentFromFile($text_path, FALSE);
     $ds->label = $text_file->filename;
     $ds->mimetype = $text_file->filemime;

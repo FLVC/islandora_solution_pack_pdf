@@ -85,7 +85,7 @@ function islandora_pdf_add_fulltext_derivative(FedoraObject $object, $file_uri) 
   $executable = variable_get('islandora_pdf_path_to_pdftotext', '/usr/bin/pdftotext');
   $temp = drupal_tempnam("temporary://", "fulltext") . '.txt';
   $derivative_file_uri = drupal_realpath($temp);
-  $command = "$executable $source $derivative_file_uri";
+  $command = "$executable -nopgbrk $source $derivative_file_uri";
   exec($command, $execout, $returncode);
   $success = ($returncode === 0);
 
@@ -102,6 +102,14 @@ function islandora_pdf_add_fulltext_derivative(FedoraObject $object, $file_uri) 
         WATCHDOG_ERROR
     );
   } else {
+    $contents = file_get_contents($derivative_file_uri);
+    if (!isset($contents) || strlen($contents) == 0) {
+        $contents = ' ';
+    }
+    $fh = fopen($derivative_file_uri, 'w');
+    fwrite($fh, preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', ' ', $contents));
+    fclose($fh);
+
     $success = islandora_pdf_add_datastream($object, $dsid, $derivative_file_uri);
   }
   file_unmanaged_delete($temp);
