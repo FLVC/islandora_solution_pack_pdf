@@ -40,7 +40,11 @@ function islandora_pdf_add_tn_derivative(AbstractObject $object, $force = FALSE)
   $width = variable_get('islandora_pdf_thumbnail_width', 200);
   $height = variable_get('islandora_pdf_thumbnail_height', 200);
   $file_uri = islandora_pdf_get_derivative_source_as_unmanaged_file($object);
-  return islandora_pdf_add_jpg_derivative($object, $file_uri, 'TN', $width, $height, $force);
+  // FLVC - clearing out tmp directory
+  $response = islandora_pdf_add_jpg_derivative($object, $file_uri, 'TN', $width, $height, $force);
+  file_unmanaged_delete($file_uri);
+  return $response;
+  //return islandora_pdf_add_jpg_derivative($object, $file_uri, 'TN', $width, $height, $force);
 }
 
 /**
@@ -72,6 +76,9 @@ function islandora_pdf_add_fulltext_derivative(AbstractObject $object, $force = 
     exec($command, $execout, $returncode);
     $success = ($returncode === 0);
 
+    // FLVC - clearing out tmp directory
+    file_unmanaged_delete($file_uri);
+
     if (!$success) {
       $success = array(
         'success' => FALSE,
@@ -96,6 +103,8 @@ function islandora_pdf_add_fulltext_derivative(AbstractObject $object, $force = 
       $sanitized_full_text = islandora_sanitize_input_for_valid_xml($full_text);
       file_put_contents($derivative_file_uri, $sanitized_full_text);
       $success = islandora_pdf_add_datastream($object, $dsid, $derivative_file_uri);
+      // FLVC - clearing out tmp directory
+      file_unmanaged_delete($temp);
       if ($success === TRUE) {
         return array(
           'success' => TRUE,
@@ -146,7 +155,11 @@ function islandora_pdf_add_preview_derivative(AbstractObject $object, $force = F
   $width = variable_get('islandora_pdf_preview_width', 500);
   $height = variable_get('islandora_pdf_preview_height', 700);
   $file_uri = islandora_pdf_get_derivative_source_as_unmanaged_file($object);
-  return islandora_pdf_add_jpg_derivative($object, $file_uri, 'PREVIEW', $width, $height, $force);
+  // FLVC - clearing out tmp directory
+  $response = islandora_pdf_add_jpg_derivative($object, $file_uri, 'PREVIEW', $width, $height, $force);
+  file_unmanaged_delete($file_uri);
+  return $response;
+  //return islandora_pdf_add_jpg_derivative($object, $file_uri, 'PREVIEW', $width, $height, $force);
 }
 
 /**
