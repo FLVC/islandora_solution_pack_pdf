@@ -12,7 +12,7 @@ This module requires the following modules/libraries:
 * [Tuque](https://github.com/islandora/tuque)
 * [ImageMagick](http://www.imagemagick.org/script/index.php) - Debian/Ubuntu `sudo apt-get install imagemagick`
 * [ImageMagick module](https://www.drupal.org/project/imagemagick)
-     * ensure that the **full path** to Imagemagick's convert is specified in the Image Toolkit (admin/config/media/image-toolkit) 
+    * ensure that the **full path** to Imagemagick's convert is specified in the Image Toolkit (admin/config/media/image-toolkit)
 * [pdftotext](http://poppler.freedesktop.org) -  Debian/Ubuntu `sudo apt-get install poppler-utils`
 * [ghostscript](http://www.ghostscript.com) - Debian/Ubuntu `sudo apt-get install ghostscript`
 
@@ -41,7 +41,7 @@ Having problems or solved a problem? Check out the Islandora google groups for a
 
 Current maintainers:
 
-* [Nick Ruest](https://github.com/ruebot)
+* [Jared Whiklo](https://github.com/whikloj)
 
 ## Development
 
